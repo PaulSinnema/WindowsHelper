@@ -25,7 +25,7 @@ internal sealed class HotkeyWindow : NativeWindow, IDisposable
     void Register(int id, uint modifiers, Keys key, string name)
     {
         if (!RegisterHotKey(Handle, id, modifiers | MOD_NOREPEAT, (uint)key))
-            Log.Write($"Hotkey {name} niet beschikbaar (al in gebruik door een ander programma)");
+            Log.Write($"Hotkey {name} not available (already used by another program)");
     }
 
     protected override void WndProc(ref Message m)

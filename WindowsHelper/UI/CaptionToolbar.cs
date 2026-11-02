@@ -146,7 +146,7 @@ internal sealed class CaptionToolbar : Form
         int hit = HitButton(e.Location);
         if (hit == _hover) return;
         _hover = hit;
-        _tip.SetToolTip(this, hit == 0 ? "Dark mode aan/uit (Ctrl+Alt+D)" : "Instellingen voor dit programma (Ctrl+Alt+S)");
+        _tip.SetToolTip(this, hit == 0 ? "Toggle dark mode (Ctrl+Alt+D)" : "Settings for this program (Ctrl+Alt+S)");
         Invalidate();
     }
 

@@ -16,12 +16,12 @@ internal sealed class SettingsPanel : FlowLayoutPanel
         BackColor = Theme.Back;
         ForeColor = Theme.Fore;
 
-        if (showDarkToggle) AddCheck("Dark mode voor dit programma", s.DarkMode, v => s.DarkMode = v);
-        AddSlider("Achtergrond (helderheid)", 0, 40, s.Background, v => s.Background = v);
-        AddSlider("Tekst (helderheid)", 50, 100, s.Text, v => s.Text = v);
-        AddCheck("Afbeeldingen niet omkeren", s.ProtectImages, v => s.ProtectImages = v);
-        AddSlider("Gevoeligheid afbeeldingsdetectie", 0, 100, s.ImageSensitivity, v => s.ImageSensitivity = v);
-        AddCheck("Donkere delen niet omkeren", s.KeepDarkAreas, v => s.KeepDarkAreas = v);
+        if (showDarkToggle) AddCheck("Dark mode for this program", s.DarkMode, v => s.DarkMode = v);
+        AddSlider("Background (brightness)", 0, 40, s.Background, v => s.Background = v);
+        AddSlider("Text (brightness)", 50, 100, s.Text, v => s.Text = v);
+        AddCheck("Do not invert images", s.ProtectImages, v => s.ProtectImages = v);
+        AddSlider("Image detection sensitivity", 0, 100, s.ImageSensitivity, v => s.ImageSensitivity = v);
+        AddCheck("Do not invert dark areas", s.KeepDarkAreas, v => s.KeepDarkAreas = v);
     }
 
     void AddCheck(string text, bool value, Action<bool> set)

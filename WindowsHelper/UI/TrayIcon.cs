@@ -23,17 +23,17 @@ internal sealed class TrayIcon : IDisposable
             ShowCheckMargin = true,
         };
 
-        var enabled = Add("Dark mode actief", () => { g.Enabled = !g.Enabled; store.Update(); });
-        var toolbar = Add("Werkbalk in titelbalk", () => { g.ShowToolbar = !g.ShowToolbar; store.Update(); });
-        var autostart = Add("Start met Windows", () =>
+        var enabled = Add("Dark mode enabled", () => { g.Enabled = !g.Enabled; store.Update(); });
+        var toolbar = Add("Toolbar in title bar", () => { g.ShowToolbar = !g.ShowToolbar; store.Update(); });
+        var autostart = Add("Start with Windows", () =>
         {
             g.StartWithWindows = !g.StartWithWindows;
             Autostart.Apply(g.StartWithWindows);
             store.Update();
         });
         _menu.Items.Add(new ToolStripSeparator());
-        Add("Instellingen…", openSettings);
-        Add("Afsluiten", exit);
+        Add("Settings…", openSettings);
+        Add("Exit", exit);
 
         _menu.Opening += (_, _) =>
         {

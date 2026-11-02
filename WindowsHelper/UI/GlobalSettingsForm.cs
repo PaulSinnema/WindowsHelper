@@ -16,7 +16,7 @@ internal sealed class GlobalSettingsForm : DarkForm
         _openApp = openApp;
         var g = store.Settings;
 
-        Text = $"WindowsHelper {AppInfo.Version} – Instellingen";
+        Text = $"WindowsHelper {AppInfo.Version} – Settings";
         FormBorderStyle = FormBorderStyle.Sizable;
         MaximizeBox = false;
         StartPosition = FormStartPosition.CenterScreen;
@@ -32,18 +32,18 @@ internal sealed class GlobalSettingsForm : DarkForm
             Padding = new Padding(16),
         };
 
-        flow.Controls.Add(Ui.MakeHeader("Algemeen"));
-        flow.Controls.Add(Check("WindowsHelper actief", g.Enabled, v => g.Enabled = v));
-        flow.Controls.Add(Check("Start met Windows", g.StartWithWindows, v => { g.StartWithWindows = v; Autostart.Apply(v); }));
-        flow.Controls.Add(Check("Werkbalk in titelbalk tonen", g.ShowToolbar, v => g.ShowToolbar = v));
-        flow.Controls.Add(Check("Dark mode automatisch aan voor nieuwe programma's", g.DarkModeForNewApps, v => g.DarkModeForNewApps = v));
+        flow.Controls.Add(Ui.MakeHeader("General"));
+        flow.Controls.Add(Check("WindowsHelper enabled", g.Enabled, v => g.Enabled = v));
+        flow.Controls.Add(Check("Start with Windows", g.StartWithWindows, v => { g.StartWithWindows = v; Autostart.Apply(v); }));
+        flow.Controls.Add(Check("Show toolbar in title bar", g.ShowToolbar, v => g.ShowToolbar = v));
+        flow.Controls.Add(Check("Dark mode on by default for new programs", g.DarkModeForNewApps, v => g.DarkModeForNewApps = v));
 
-        flow.Controls.Add(Ui.MakeHeader("Standaard voor nieuwe programma's"));
+        flow.Controls.Add(Ui.MakeHeader("Defaults for new programs"));
         var defaults = new SettingsPanel(g.Defaults, false);
         defaults.Changed += store.Update;
         flow.Controls.Add(defaults);
 
-        flow.Controls.Add(Ui.MakeHeader("Programma's"));
+        flow.Controls.Add(Ui.MakeHeader("Programs"));
         _list = new ListBox
         {
             Width = 520,
@@ -63,20 +63,20 @@ internal sealed class GlobalSettingsForm : DarkForm
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             Margin = new Padding(3, 8, 3, 0),
         };
-        var toggle = Ui.MakeButton("Aan/uit");
+        var toggle = Ui.MakeButton("On/off");
         toggle.Click += (_, _) => ToggleSelected();
-        var edit = Ui.MakeButton("Wijzigen…");
+        var edit = Ui.MakeButton("Edit…");
         edit.Click += (_, _) => EditSelected();
-        var remove = Ui.MakeButton("Verwijderen");
+        var remove = Ui.MakeButton("Remove");
         remove.Click += (_, _) => RemoveSelected();
         buttons.Controls.Add(toggle);
         buttons.Controls.Add(edit);
         buttons.Controls.Add(remove);
         flow.Controls.Add(buttons);
 
-        flow.Controls.Add(Ui.MakeHeader("Sneltoetsen"));
-        flow.Controls.Add(Ui.MakeLabel("Ctrl+Alt+D    dark mode aan/uit voor het actieve programma"));
-        flow.Controls.Add(Ui.MakeLabel("Ctrl+Alt+S    instellingen van het actieve programma"));
+        flow.Controls.Add(Ui.MakeHeader("Shortcuts"));
+        flow.Controls.Add(Ui.MakeLabel("Ctrl+Alt+D    toggle dark mode for the active program"));
+        flow.Controls.Add(Ui.MakeLabel("Ctrl+Alt+S    settings for the active program"));
         Controls.Add(flow);
 
         FillList();
@@ -103,7 +103,7 @@ internal sealed class GlobalSettingsForm : DarkForm
         foreach (var kv in _store.Settings.Apps.OrderBy(k => k.Key, StringComparer.OrdinalIgnoreCase))
         {
             _keys.Add(kv.Key);
-            _list.Items.Add($"{kv.Key}   —   dark mode {(kv.Value.DarkMode ? "aan" : "uit")}");
+            _list.Items.Add($"{kv.Key}   —   dark mode {(kv.Value.DarkMode ? "on" : "off")}");
         }
         if (selected != null) _list.SelectedIndex = _keys.IndexOf(selected);
         _list.EndUpdate();

@@ -42,9 +42,9 @@ internal sealed class AppSettingsForm : DarkForm
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
             Margin = new Padding(0, 16, 0, 0),
         };
-        var reset = Ui.MakeButton("Standaardwaarden");
+        var reset = Ui.MakeButton("Defaults");
         reset.Click += (_, _) => ResetToDefaults();
-        var close = Ui.MakeButton("Sluiten");
+        var close = Ui.MakeButton("Close");
         close.Click += (_, _) => Close();
         buttons.Controls.Add(reset);
         buttons.Controls.Add(close);

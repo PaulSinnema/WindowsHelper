@@ -8,7 +8,7 @@
            Scope="perMachine"
            Compressed="yes">
 
-    <MajorUpgrade DowngradeErrorMessage="Er is al een nieuwere versie van WindowsHelper geinstalleerd." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of WindowsHelper is already installed." />
     <MediaTemplate EmbedCab="yes" />
 
     <StandardDirectory Id="ProgramFiles64Folder">
@@ -23,7 +23,7 @@
       <Files Directory="INSTALLFOLDER" Include="$(var.AppPublishDir)**" />
 
       <Component Id="StartMenuShortcut" Directory="ProgramMenuFolder">
-        <Shortcut Id="AppShortcut" Name="WindowsHelper" Description="Dark mode voor elk venster"
+        <Shortcut Id="AppShortcut" Name="WindowsHelper" Description="Dark mode for any window"
                   Target="[INSTALLFOLDER]WindowsHelper.exe" WorkingDirectory="INSTALLFOLDER" />
         <RegistryValue Root="HKLM" Key="Software\WindowsHelper" Name="Shortcut" Type="integer" Value="1" KeyPath="yes" />
       </Component>
