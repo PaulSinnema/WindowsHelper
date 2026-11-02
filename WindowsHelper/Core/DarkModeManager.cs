@@ -54,6 +54,8 @@ internal sealed class DarkModeManager : IDisposable
 
     public bool IsDark(IntPtr target) => _store.IsDark(AppKey(target));
 
+    public bool ShowToolbarSetting => _store.Settings.Enabled && _store.Settings.ShowToolbar;
+
     // Toolbar sits above the overlay when there is one
     public IntPtr ZAnchorFor(IntPtr target) =>
         _overlays.TryGetValue(target, out var o) && o.IsShown ? o.Handle : target;
@@ -171,6 +173,9 @@ internal sealed class DarkModeManager : IDisposable
             o.UpdateBounds();
             o.EnsureZOrder();
         }
+        // Foreground event may arrive while a new dialog is still invisible: catch up here
+        IntPtr fgNow = GetForegroundWindow();
+        if (fgNow != _active && WindowInfo.IsCandidate(fgNow)) OnForeground(fgNow);
         _toolbar.Reposition();
 
         if (++_maintainTicks % 5 == 0) DestroyOrphans();
@@ -222,6 +227,14 @@ internal sealed class DarkModeManager : IDisposable
 
     public void ToggleActive() => ToggleDark(_active);
 
+    // Settings for the active program, placed at the top right of its window
+    public void OpenActiveSettings()
+    {
+        if (_active == IntPtr.Zero || !IsWindow(_active)) return;
+        RECT f = WindowInfo.FrameBounds(_active);
+        OpenAppSettings(AppKey(_active), new Rectangle(f.Left, f.Top, f.Width, (int)Math.Round(32 * WindowInfo.Scale(_active))));
+    }
+
     // Overlay windows are created with this exact caption
     static bool IsOwnOverlay(IntPtr h)
     {
@@ -232,6 +245,10 @@ internal sealed class DarkModeManager : IDisposable
     // Diagnostics: log geometry and save source/result images of the active overlay
     public void DumpActive()
     {
+        IntPtr fg = GetForegroundWindow();
+        Log.Write($"Dump foreground=0x{fg:X} {AppKey(fg)} class={WindowInfo.ClassName(fg)} candidate={WindowInfo.IsCandidate(fg)} " +
+                  $"overlayCandidate={WindowInfo.IsOverlayCandidate(fg)} dark={_store.IsDark(AppKey(fg))} active=0x{_active:X} " +
+                  $"toolbar: {_toolbar.Describe()}");
         foreach (var (h, ov) in _overlays)
         {
             GetWindowRect(h, out RECT t);

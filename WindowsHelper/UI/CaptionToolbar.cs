@@ -65,6 +65,9 @@ internal sealed class CaptionToolbar : Form
         Invalidate();
     }
 
+    public string Describe() =>
+        $"target=0x{_target:X} visible={Visible} bounds=({Bounds.X},{Bounds.Y},{Bounds.Width}x{Bounds.Height}) showSetting={_manager.ShowToolbarSetting}";
+
     public void Detach()
     {
         _target = IntPtr.Zero;
@@ -91,23 +94,19 @@ internal sealed class CaptionToolbar : Form
         int w = (int)Math.Round(34 * scale) * 2;
         RECT frame = WindowInfo.FrameBounds(_target);
         int captionH = (int)Math.Round(32 * scale);
-        int buttonsLeft = frame.Right - (int)Math.Round(140 * scale);
 
-        // Standard caption buttons: place the bar just left of them
+        // Caption height from the standard caption buttons when available
         if (DwmGetWindowAttribute(_target, DWMWA_CAPTION_BUTTON_BOUNDS, out RECT cb, Marshal.SizeOf<RECT>()) == 0 && !cb.IsEmpty)
-        {
-            GetWindowRect(_target, out RECT wr);
-            buttonsLeft = wr.Left + cb.Left;
             captionH = Math.Max(cb.Height, h);
-        }
 
-        int x = buttonsLeft - w - (int)Math.Round(8 * scale);
-        int y = frame.Top + Math.Max(0, (captionH - h) / 2);
-        if (x < frame.Left)
+        // Centre of the caption: custom title bars (Qt, Chrome) keep their own icons at the sides
+        if (frame.Width < w + (int)Math.Round(300 * scale))
         {
             HideBar();
             return;
         }
+        int x = frame.Left + (frame.Width - w) / 2;
+        int y = frame.Top + Math.Max(0, (captionH - h) / 2);
 
         SetWindowPos(Handle, IntPtr.Zero, x, y, w, h, SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
         ZOrder.SetOwner(Handle, _target);
@@ -147,7 +146,7 @@ internal sealed class CaptionToolbar : Form
         int hit = HitButton(e.Location);
         if (hit == _hover) return;
         _hover = hit;
-        _tip.SetToolTip(this, hit == 0 ? "Dark mode aan/uit (Ctrl+Alt+D)" : "Instellingen voor dit programma");
+        _tip.SetToolTip(this, hit == 0 ? "Dark mode aan/uit (Ctrl+Alt+D)" : "Instellingen voor dit programma (Ctrl+Alt+S)");
         Invalidate();
     }
 

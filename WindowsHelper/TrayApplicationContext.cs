@@ -19,6 +19,7 @@ internal sealed class TrayApplicationContext : ApplicationContext
         _tray = new TrayIcon(_store, OpenSettings, Exit);
         _hotkey.Pressed += _manager.ToggleActive;
         _hotkey.DumpPressed += _manager.DumpActive;
+        _hotkey.SettingsPressed += _manager.OpenActiveSettings;
     }
 
     void OpenSettings()

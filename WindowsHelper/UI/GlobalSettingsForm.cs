@@ -74,7 +74,9 @@ internal sealed class GlobalSettingsForm : DarkForm
         buttons.Controls.Add(remove);
         flow.Controls.Add(buttons);
 
-        flow.Controls.Add(Ui.MakeLabel("Sneltoets Ctrl+Alt+D: dark mode aan/uit voor het actieve programma."));
+        flow.Controls.Add(Ui.MakeHeader("Sneltoetsen"));
+        flow.Controls.Add(Ui.MakeLabel("Ctrl+Alt+D    dark mode aan/uit voor het actieve programma"));
+        flow.Controls.Add(Ui.MakeLabel("Ctrl+Alt+S    instellingen van het actieve programma"));
         Controls.Add(flow);
 
         FillList();

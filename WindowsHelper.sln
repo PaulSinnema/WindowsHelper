@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WindowsHelper", "WindowsHel
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8F3A6D2C-1E4B-4C7A-9B5D-3E6F8A1C2D47}"
 	ProjectSection(SolutionItems) = preProject
+		CHANGELOG.md = CHANGELOG.md
 		Directory.Build.props = Directory.Build.props
+		README.md = README.md
 		Installer\Package.wxs = Installer\Package.wxs
 		Installer\WindowsHelper.Installer.wixproj = Installer\WindowsHelper.Installer.wixproj
 		tools\Sign.ps1 = tools\Sign.ps1
