@@ -9,7 +9,7 @@ The version number lives in `Directory.Build.props` and is bumped on every itera
 - README and CHANGELOG in English.
 
 ### Added
-- README warning about the self-signed certificate that the installer adds to the trusted root store, and its risks.
+- README note about the self-signed certificate that the installer adds to the trusted root store.
 
 ## [1.0.15] – 2026-11-02
 ### Removed

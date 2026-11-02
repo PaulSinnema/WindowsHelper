@@ -3,23 +3,6 @@
 Forces dark mode on any window in Windows, configurable per program.
 Made for better readability (e.g. with macular degeneration): white backgrounds become dark, text becomes light, images stay original.
 
-> [!WARNING]
-> **This installer contains a self-signed certificate.**
-> To let WindowsHelper draw over administrator windows (`uiAccess`), Windows requires a signed program whose
-> certificate is trusted. WindowsHelper is signed with its own, self-made certificate (`CN=WindowsHelper Code Signing`),
-> and **the installer adds that certificate to the machine's *Trusted Root Certification Authorities***.
->
-> What this means for you:
-> - Your PC will trust **everything** signed with this certificate's private key, not just WindowsHelper:
->   programs, scripts and drivers. If that key were ever stolen, someone could sign malware that your PC trusts.
-> - The certificate is not issued by a recognised certificate authority, so nobody independent has verified who made it.
-> - Windows SmartScreen may show *"Unknown publisher"* when you download or run the installer.
-> - The private key exists only on the developer's machine and is marked non-exportable, but that is a promise, not a guarantee you can check.
->
-> **Only install WindowsHelper if you trust the author.** Uninstalling WindowsHelper removes the certificate again.
-> You can check or remove it manually: `certlm.msc` → *Trusted Root Certification Authorities* → *Certificates* →
-> *WindowsHelper Code Signing*.
-
 ## Features
 - Dark mode per program, on/off and adjustable (background, text brightness, images, dark areas).
 - Optional toolbar in the centre of the active window's title bar: moon = on/off, gear = settings for that program.
@@ -90,10 +73,16 @@ On the first Release build, `tools\Sign.ps1` creates a self-signed code signing 
 ## Installing
 Run the MSI (asks for administrator rights). The installer:
 - installs to `C:\Program Files\WindowsHelper`,
-- adds the certificate to *Trusted Root Certification Authorities* (required for `uiAccess`, see the warning above),
+- adds the WindowsHelper certificate to *Trusted Root Certification Authorities* (see the note below),
 - creates a Start menu shortcut.
 
 Start with Windows is handled by the app itself (setting *Start with Windows*).
+
+> [!NOTE]
+> **About the certificate.** To work over administrator windows, Windows requires WindowsHelper to be signed with a trusted
+> certificate. WindowsHelper uses its own self-signed certificate, which the installer adds to your trusted certificates.
+> Your PC then also trusts anything else signed with that certificate, so only install WindowsHelper if you trust the author.
+> Windows may show *"Unknown publisher"* during installation. Uninstalling WindowsHelper removes the certificate again.
 
 ## Settings and log
 - Settings: `%APPDATA%\WindowsHelper\settings.json`
