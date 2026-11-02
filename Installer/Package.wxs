@@ -1,0 +1,39 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:iis="http://wixtoolset.org/schemas/v4/wxs/iis">
+
+  <Package Name="WindowsHelper"
+           Manufacturer="Paul Sinnema"
+           Version="$(var.ProductVersion)"
+           UpgradeCode="C2A9E471-6B3F-4D58-A1E2-7F9B3C5D8E16"
+           Scope="perMachine"
+           Compressed="yes">
+
+    <MajorUpgrade DowngradeErrorMessage="Er is al een nieuwere versie van WindowsHelper geinstalleerd." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="WindowsHelper" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <!-- Public part of the signing cert; trusted root is required for uiAccess -->
+    <Binary Id="SigningCert" SourceFile="WindowsHelper.cer" />
+
+    <Feature Id="Main" Title="WindowsHelper">
+      <Files Directory="INSTALLFOLDER" Include="$(var.AppPublishDir)**" />
+
+      <Component Id="StartMenuShortcut" Directory="ProgramMenuFolder">
+        <Shortcut Id="AppShortcut" Name="WindowsHelper" Description="Dark mode voor elk venster"
+                  Target="[INSTALLFOLDER]WindowsHelper.exe" WorkingDirectory="INSTALLFOLDER" />
+        <RegistryValue Root="HKLM" Key="Software\WindowsHelper" Name="Shortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+
+      <Component Id="TrustedRootCert" Directory="INSTALLFOLDER">
+        <iis:Certificate Id="WindowsHelperRootCert" Name="WindowsHelper Code Signing"
+                         StoreLocation="localMachine" StoreName="root" Overwrite="yes" BinaryRef="SigningCert" />
+        <RegistryValue Root="HKLM" Key="Software\WindowsHelper" Name="Certificate" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </Feature>
+
+  </Package>
+</Wix>

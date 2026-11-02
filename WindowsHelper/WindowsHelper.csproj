@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.22621.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <RootNamespace>WindowsHelper</RootNamespace>
+    <AssemblyName>WindowsHelper</AssemblyName>
+    <NoWarn>$(NoWarn);WFO5001;WFO5002</NoWarn>
+  </PropertyGroup>
+
+  <!-- uiAccess only in Release: requires signed exe in Program Files -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' != 'Release'">
+    <ApplicationManifest>app.debug.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Vortice.Direct3D11" Version="3.8.3" />
+    <PackageReference Include="Vortice.D3DCompiler" Version="3.8.3" />
+  </ItemGroup>
+
+  <!-- Sign published exe (creates self-signed cert on first run) -->
+  <Target Name="SignPublishedExe" AfterTargets="Publish" Condition="'$(Configuration)' == 'Release'">
+    <Exec Command="powershell.exe -NoProfile -ExecutionPolicy Bypass -File &quot;$(MSBuildThisFileDirectory)..\tools\Sign.ps1&quot; -FilePath &quot;$(PublishDir)$(AssemblyName).exe&quot; -CerPath &quot;$(MSBuildThisFileDirectory)..\Installer\WindowsHelper.cer&quot;" />
+  </Target>
+
+  <!-- Release build in VS also produces the MSI -->
+  <Target Name="BuildInstaller" AfterTargets="Build" Condition="'$(Configuration)' == 'Release' and '$(BuildingInstaller)' != 'true' and '$(DesignTimeBuild)' != 'true'">
+    <Exec Command="dotnet build &quot;$(MSBuildThisFileDirectory)..\Installer\WindowsHelper.Installer.wixproj&quot; -c Release -p:BuildingInstaller=true" />
+  </Target>
+
+</Project>

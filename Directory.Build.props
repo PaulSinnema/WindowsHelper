@@ -1,0 +1,9 @@
+﻿<Project>
+  <PropertyGroup>
+    <!-- Bump on every iteration -->
+    <Version>0.1.10</Version>
+    <Authors>Paul Sinnema</Authors>
+    <Product>WindowsHelper</Product>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+  </PropertyGroup>
+</Project>

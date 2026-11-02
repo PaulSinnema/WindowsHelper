@@ -1,0 +1,23 @@
+﻿<Project Sdk="WixToolset.Sdk/6.0.2">
+
+  <PropertyGroup>
+    <OutputName>WindowsHelper-$(Version)</OutputName>
+    <InstallerPlatform>x64</InstallerPlatform>
+    <AppPublishDir>$(MSBuildThisFileDirectory)obj\publish\</AppPublishDir>
+    <DefineConstants>ProductVersion=$(Version);AppPublishDir=$(AppPublishDir)</DefineConstants>
+    <!-- perMachine package: ProgramMenuFolder is all-users, ICE validation assumes per-user -->
+    <SuppressIces>ICE38;ICE43;ICE57</SuppressIces>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Iis.wixext" Version="6.0.2" />
+  </ItemGroup>
+
+  <!-- Publish + sign the app before WiX harvests the files -->
+  <Target Name="PublishApp" BeforeTargets="BeforeBuild">
+    <RemoveDir Directories="$(AppPublishDir)" />
+    <MSBuild Projects="..\WindowsHelper\WindowsHelper.csproj" Targets="Restore" Properties="Configuration=Release;BuildingInstaller=true;_PublishRestore=true" />
+    <MSBuild Projects="..\WindowsHelper\WindowsHelper.csproj" Targets="Publish" Properties="Configuration=Release;BuildingInstaller=true;PublishDir=$(AppPublishDir)" />
+  </Target>
+
+</Project>
